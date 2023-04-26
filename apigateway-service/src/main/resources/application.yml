@@ -24,10 +24,14 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-          filters:
-            - name: CustomFilter
-            - name: LoggingFilter
-              args:
-                baseMessage: Spring Cloud GateWay Logging Filter
-                preLogger: true
-                postLogger: true
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+#          filters:
+#            - name: CustomFilter
+#            - name: LoggingFilter
+#              args:
+#                baseMessage: Spring Cloud GateWay Logging Filter
+#                preLogger: true
+#                postLogger: true
