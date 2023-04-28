@@ -7,6 +7,8 @@ import com.example.userservice.vo.ResponseOrder;
 import com.example.userservice.vo.ResponseUser;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,21 @@ public class UserServiceImpl implements UserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("username not found");
+        }
+
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getEncryptedPwd(),
+                true, true, true, true, new ArrayList<>());
     }
 
     @Override
@@ -56,5 +70,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Iterable<User> getUserByAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDto getUserDetailByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("email not found");
+        }
+        return new ModelMapper().map(user, UserDto.class);
     }
 }
