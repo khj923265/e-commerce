@@ -7,9 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ConfigServiceApplicationTests {
 
     /**
+     * Pass By Value(값에 의한 전달)는 복사된 데이터를 전달하여 구성함으로써
+     * 값을 수정하여도 원본의 데이터에는 영향을 주지 않도록 하는 방식이다
+     *
+     * Pass By Reference(참조에 의한 전달)는 주소 값을 전달하여 실제 값에 대한 Alias를 구성함으로써
+     * 값을 수정하면 원본의 데이터가 수정되도록 하는 방식이다
+     */
+
+    /**
      * 원시 타입(Primitive Type) VS 참조 타입 (Reference Type)
      * 원시 타입 : boolean, char, byte, short, int, long, float, double
-     * 참초 타입 : 원시 타입 외에 문자열, 배열, 열거, 클래스, 인터페이스
+     * 참조 타입 : 원시 타입 외에 문자열, 배열, 열거, 클래스, 인터페이스
      * 원시 타입은 스택에 값 자체를 담지만 참초 타입은 주소값을 스택에 담고 실제 값은 힙 영역에 할당된다.
      * 동적 메모리인 힙영역은 사용된 값이 담겨져 있다가 참조하는 변수가 없어지만 가비지컬렉터에서 이를 제거한다.
      */
@@ -24,6 +32,12 @@ class ConfigServiceApplicationTests {
      */
 
     /**
+     * 동일성 VS 동등성
+     * equels 값 비교 (동등성)
+     * == 주소값 비교 (동일성)
+     */
+
+    /**
      * 원시 변수의 Pass By Value (Call By Value)
      * 원시 변수(Primitive Value) 는 Stack 에 값이 할당된다.
      * 그래서 원본데이터 값이 변경되지 않음
@@ -34,6 +48,7 @@ class ConfigServiceApplicationTests {
     void test1() {
         int a = 10;
         int b = 20;
+
         changeIntValue(a, b);
 
         System.out.println(a); // 10 ? 30 ?
@@ -49,25 +64,42 @@ class ConfigServiceApplicationTests {
      * String 의 Pass By Value (Call By Value)
      * String 은 class 면서 불면이기 때문에 복사된 주소값을 변경한다고 해서 해당주소값의 값이 변경되지는 않음
      * ex)
-     * String str = "test";
-     * str = "test2"; -> str 에 새로운 주소를 할당
+     * String str = "test"; (리터럴 사용시 내부적으로 intern() 사용)
+     * str = "test2"; -> str 에 다른 주소를 할당 (String pool 에서 있으면 가져오고 없으면 pool에 생성)
      * 위에 str 과 아래 str 의 주소값이 달라짐 (값이 달라진것 처럼 보이지만 새로 주소를 할당시킴)
      * java 의 String 은 heep 에 String pool 에 따로 값을 보관하는데
-     * 만약 같은 값이 있으면 가지고 있는 주소값을 바라봄
-     * ex)
-     * String str = "test";
-     * String str2 = "test";
-     * str == str2 -> true
+     * 만약 같은 값이 있으면 가지고 있는 주소값을 리턴
+     *
+     * ++ Integer(그외 대부분의 래퍼클래스) 는 비슷하게 valueOf()에서 캐싱된 데이터를 가져옴 -128~127(기본값) jvm 설정값으로 설정 가능
+     * VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+     * Integer a = 127;
+     * Integer b = 127;
+     * a == b -> true
+     * Integer a = 500;
+     * Integer b = 500;
+     * a == b -> false
      */
 
     @Test
     void test2() {
+        // 첫번째 테스트
         String a = "aaa";
         String b = "bbb";
+
         changeStringValue(a, b);
 
         System.out.println(a); // aaa ? ccc ?
         System.out.println(b); // bbb ? ddd ?
+
+        // 두번째 테스트
+        String test = "test";
+        String test2 = "test";
+        String newTest = new String("test");
+        String internTest = newTest.intern();
+
+        System.out.println("String test : " + (test == test2)); //True
+        System.out.println("String test new : " + (test2 == newTest)); //False
+        System.out.println("String test intern : " + (test2 == internTest));
     }
 
     private void changeStringValue(String a, String b) {
@@ -82,7 +114,7 @@ class ConfigServiceApplicationTests {
      * ex)
      * Stack                        Heep
      * cat - E0001(복사본)->포도>나비
-     * cat - E0001                  Cat 포도 (E0001 과 연결)
+     * cat - E0001                  Cat 포도->나비 (E0001 과 연결)
      */
 
     @Test
@@ -92,7 +124,7 @@ class ConfigServiceApplicationTests {
 
         changeObjectValue(cat);
 
-        System.out.println(cat); // 포도 ? 나비 ?
+        System.out.println(cat.name); // 포도 ? 나비 ?
     }
 
     private void changeObjectValue(Cat cat) {
