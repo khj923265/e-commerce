@@ -33,7 +33,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/error/**").permitAll()
                 .antMatchers("/**")
-                .access("hasIpAddress('172.20.10.2')")
+                .permitAll()// 네트워크가 바뀌면서 ip 주소가 달라져서 접근이 차단됨 임시로 모두 허용함
+//                .access("hasIpAddress('172.20.10.2')")
 //                .hasIpAddress("172.20.10.2")
                 .and()
                 .addFilter(getAuthenticationFilter());

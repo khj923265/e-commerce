@@ -71,6 +71,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 08C51
+    // 스택, 메소드 영역
+    // 바이트코드 인젝션 알아보기(해킹기법중 하나 자바가 취약함)
+    // File nio 사용하면 압축률이 좋다
+
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<ResponseUser> getUser(@PathVariable("userId") String userId) {
         ResponseUser user = userService.getUserByUserId(userId);

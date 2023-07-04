@@ -7,5 +7,5 @@ spring:
 
 eureka:
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: false # Eureka 서버에 등록할 것인지 여부 (기본값 true)
+    fetch-registry: false # Eureka client 가 서비스 인스턴스 정보를 로컬 캐시에 저장할 것인지 여부 (기본값 true)
