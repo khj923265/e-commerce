@@ -1,6 +1,7 @@
 encrypt:
   key-store:
-    location: file://${user.home}/Desktop/ecommerce/key-store/apiEncryptionKey.jks
+#    location: file://${user.home}/Desktop/ecommerce/key-store/apiEncryptionKey.jks
+    location: file:/apiEncryptionKey.jks
     password: test1234
     alias: apiEncryptionKey
 #  key: ajrngkaefnvkdmvkcoak5106
