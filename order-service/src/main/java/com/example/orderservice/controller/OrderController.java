@@ -72,12 +72,12 @@ public class OrderController {
 
         List<ResponseOrder> result = new ArrayList<>();
         orderList.forEach(v -> result.add(new ModelMapper().map(v, ResponseOrder.class)));
-        try {
-            Thread.sleep(1000);
-            throw new Exception("장애 발생");
-        } catch (Exception ex) {
-            log.warn(ex.getMessage());
-        }
+//        try {
+//            Thread.sleep(1000);
+//            throw new Exception("장애 발생");
+//        } catch (Exception ex) {
+//            log.warn(ex.getMessage());
+//        }
         log.info("Add retrieves orders data");
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

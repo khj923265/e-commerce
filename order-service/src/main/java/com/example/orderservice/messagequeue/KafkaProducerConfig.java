@@ -20,7 +20,8 @@ public class KafkaProducerConfig {
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        //TODO ip 주소 local, docker 두개 설정에서 가져와서 사용하도록 바꿔야 함
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.18.0.101:9092");
         // key, valeu 역직렬화
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
